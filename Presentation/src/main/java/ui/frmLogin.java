@@ -8,7 +8,12 @@ import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 
 /**
- *
+ * frmLogin class represents the login UI for DaChat app.
+ * It manages essential components like user phone number and password.
+ * 
+ * @version 1.0
+ * @since 2024-05-22
+ * 
  * @author martinez
  */
 public class frmLogin extends javax.swing.JFrame {
@@ -20,14 +25,28 @@ public class frmLogin extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         
+        /**
+         * FocusListener added to the text fields containing the user phone number and password.
+         * It shows a support message inside the fields when they are not focused.
+         */
         txfPhone.addFocusListener(new FocusListener(){
+            /**
+             * When this text field gains the focus it clears the default text
+             * to allow the user to type a phone number.
+             * 
+             * @param e the focus event
+             */
             @Override
             public void focusGained(FocusEvent e){
                 if(txfPhone.getText().equals("Enter your phone number")){
                     txfPhone.setText("");
                 }
             }
-            
+            /**
+             * When this text field loses focus it restores the default support messages if the field is empty
+             * 
+             * @param e the focus event
+             */
             @Override
             public void focusLost(FocusEvent e){
                 if(txfPhone.getText().isEmpty()){
@@ -37,13 +56,23 @@ public class frmLogin extends javax.swing.JFrame {
         });
         
         pwfPassword.addFocusListener(new FocusListener(){
+            /**
+             * When this text field gains the focus it clears the default text
+             * to allow the user to type a password.
+             * 
+             * @param e the focus event
+             */
             @Override
             public void focusGained(FocusEvent e){
                 if(pwfPassword.getText().equals("Type your password")){
                     pwfPassword.setText("");
                 }
             }
-            
+            /**
+             * When this text field loses focus it restores the default support messages if the field is empty
+             * 
+             * @param e the focus event
+             */
             @Override
             public void focusLost(FocusEvent e){
                 if(pwfPassword.getText().isEmpty()){
