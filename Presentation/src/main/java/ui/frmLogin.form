@@ -96,7 +96,7 @@
         <Container class="javax.swing.JPanel" name="pnlPhone">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="66" red="33" type="rgb"/>
+              <Color blue="f2" green="6e" red="35" type="rgb"/>
             </Property>
           </Properties>
 
@@ -159,7 +159,7 @@
         <Container class="javax.swing.JPanel" name="pnlPassword">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="66" red="33" type="rgb"/>
+              <Color blue="f2" green="6e" red="35" type="rgb"/>
             </Property>
           </Properties>
 
