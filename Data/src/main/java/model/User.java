@@ -18,14 +18,16 @@ public class User {
     private String password;
     private Address address;
     private Date birthdate;
+    private String gender;
     
-    public User(ObjectId id, String name, String phone, String password, Address address, Date birthdate){
+    public User(ObjectId id, String name, String phone, String password, Address address, Date birthdate, String gender){
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.password = password;
         this.address = address;
         this.birthdate = birthdate;
+        this.gender = gender;
     }
 
     public ObjectId getId() {
@@ -74,5 +76,13 @@ public class User {
 
     public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

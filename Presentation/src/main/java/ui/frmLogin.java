@@ -6,6 +6,8 @@ package ui;
 
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
+import auth.AuthService;
+import model.User;
 
 /**
  * frmLogin class represents the login UI for DaChat app.
@@ -179,6 +181,11 @@ public class frmLogin extends javax.swing.JFrame {
         lblLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogin.setText("Login");
         lblLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLoginMouseClicked(evt);
+            }
+        });
 
         lblCreateAccount.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblCreateAccount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -239,6 +246,20 @@ public class frmLogin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void lblLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoginMouseClicked
+        // TODO add your handling code here:
+        String phone = txfPhone.getText();
+        String password = pwfPassword.getText();
+        
+        AuthService auth = new AuthService();
+        if(auth.login(phone, password)){
+            System.out.println("Welcome");
+        }
+        else{
+            System.out.println("Try again");
+        }
+    }//GEN-LAST:event_lblLoginMouseClicked
 
     /**
      * @param args the command line arguments
