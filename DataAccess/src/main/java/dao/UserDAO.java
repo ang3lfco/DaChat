@@ -21,6 +21,28 @@ import org.bson.Document;
  */
 public class UserDAO {
     
+    public void insert(User user){
+        Document userAddress = new Document()
+                .append("street", user.getAddress().getStreet())
+                .append("number", user.getAddress().getNumber())
+                .append("zipcode", user.getAddress().getZipcode());
+        
+        Document userDoc = new Document()
+                .append("_id", user.getId())
+                .append("name", user.getPhone())
+                .append("phone", user.getPhone())
+                .append("password", user.getPassword())
+                .append("address", userAddress)
+                .append("birthdate", user.getBirthdate())
+                .append("gender", user.getGender());
+        
+        MongoClient mongoClient = MongoClients.create(MongoConnection.getConnection());
+        MongoCollection<Document> collection = mongoClient.getDatabase(MongoConnection.getDatabase())
+                .getCollection(MongoConnection.getUsersCollection());
+        
+        collection.insertOne(userDoc);
+    }
+    
     public User findByPhone(String phone){
         MongoClient mongoClient = MongoClients.create(MongoConnection.getConnection());
         MongoCollection<Document> collection = mongoClient.getDatabase(MongoConnection.getDatabase())

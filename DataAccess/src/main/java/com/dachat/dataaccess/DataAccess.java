@@ -3,7 +3,6 @@
  */
 
 package com.dachat.dataaccess;
-
 /**
  *
  * @author martinez
