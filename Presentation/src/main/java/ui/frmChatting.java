@@ -4,6 +4,31 @@
  */
 package ui;
 
+import model.Chat;
+import model.Message;
+import services.ChatService;
+
+import java.util.List;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import services.UserService;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.GroupLayout;
+import javax.swing.JOptionPane;
+import javax.swing.LayoutStyle;
+import org.bson.types.ObjectId;
+import services.MessageService;
+
 /**
  * frmChatting represents the Chatting UI for DaChat app.
  * It manages the main functionalities of messaging and chatting all over this application.
@@ -14,13 +39,138 @@ package ui;
  * @author martinez
  */
 public class frmChatting extends javax.swing.JFrame {
-
+    private String phone;
+    private List<Chat> chats;
+    private ChatService chatService;
+    private List<JPanel> panels;
+    private ObjectId selectedChatId;
     /**
      * Creates new form frmChatting
+     * @param phone
      */
-    public frmChatting() {
+    public frmChatting(String phone) {
         initComponents();
         setLocationRelativeTo(null);
+        
+        this.chatService = new ChatService();
+        this.phone = phone;
+        this.chats = chatService.LoadChats(phone);
+        panels = new ArrayList<>();
+        
+        if(!chats.isEmpty()){
+            for(Chat chat : chats){
+                
+                JPanel chatPanel = new JPanel();
+                chatPanel.setBackground(new Color(0, 51, 102));
+                chatPanel.setPreferredSize(new Dimension(211,70));
+                
+                String friendPhone = "";
+                for(String participant : chat.getParticipants()){
+                    if(!participant.equals(phone)){
+                        friendPhone = participant;
+                    }
+                }
+                UserService userService = new UserService();
+                
+                JLabel chatText1 = new JLabel(userService.LoadUser(friendPhone).getName());
+                JLabel chatText2 = new JLabel(chat.getParticipants().toString());
+                Font sogoeBold12 = new Font("Segoe UI", Font.BOLD, 12);
+                Font sogoePlain12 = new Font("Sogoe UI", Font.PLAIN, 12);
+                chatText1.setFont(sogoeBold12);
+                chatText1.setForeground(Color.WHITE);
+                chatText2.setFont(sogoePlain12);
+                chatText2.setForeground(Color.WHITE);
+                
+                GroupLayout layout = new GroupLayout(chatPanel);
+                chatPanel.setLayout(layout);
+                
+                layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+//                                .addComponent(null) //icon
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(chatText1)
+                                        .addComponent(chatText2)))
+                );
+                layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+//                                        .addComponent(null) //icon
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(chatText1)
+                                                .addComponent(chatText2)))
+                                .addGap(0,0, Short.MAX_VALUE))
+                );
+                
+                chatPanel.addMouseListener(new MouseAdapter(){
+                    @Override
+                    public void mouseClicked(MouseEvent e){
+                        selectedChatId = chat.getId();
+                        String phone1 = chat.getParticipants().get(0);
+                        String phone2 = chat.getParticipants().get(1);
+                        
+                        MessageService msgService = new MessageService();
+                        List<Message> messages = msgService.LoadMessages(phone1, phone2);
+                        showMessages(messages);
+                    }
+                });
+                panel.add(chatPanel);
+                panels.add(chatPanel);
+            }
+            panel.updateUI();
+        }
+        
+        txfSearch.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String searchedText = txfSearch.getText().trim();
+                if(!searchedText.isEmpty()){
+                    boolean found = false;
+                    for(JPanel panel : panels){
+                        Component[] components = panel.getComponents();
+                        JLabel chatText1 = null;
+                        JLabel chatText2 = null;
+                        if(components.length >= 3){
+                            chatText1 = (JLabel) components[1];
+                            chatText2 = (JLabel) components[2];
+                        }
+                        if(chatText1 != null && chatText2 != null){
+                            String title = chatText1.getText().trim();
+                            String description = chatText2.getText().trim();
+                            if(title.toLowerCase().contains(searchedText.toLowerCase()) || description.toLowerCase().contains(searchedText.toLowerCase())){
+                                panel.setVisible(true);
+                                found = true;
+                            }
+                            else{
+                                panel.setVisible(false);
+                            }
+                        }
+                    }
+                    if(!found){
+                            JOptionPane.showMessageDialog(rootPane, "No matches found.");
+                    }
+                }
+                else{
+                    for(JPanel panel : panels){
+                        panel.setVisible(true);
+                    }
+                }
+            }
+        });
+    }
+    
+    private void showMessages(List<Message> messages){
+        txaMessages.setText("");
+        txaMessages.setForeground(Color.WHITE);
+        Font sogoeBold12 = new Font("Sogoe UI", Font.BOLD, 12);
+        txaMessages.setFont(sogoeBold12);
+        
+        UserService userService = new UserService();
+        for(Message message : messages){
+            String nombre = userService.LoadUser(message.getIdSender()).getName();
+            String fecha = message.getTimestamp().toString().substring(0,20) + message.getTimestamp().toString().substring(24);
+            txaMessages.append("(" + fecha + ") " + nombre + " says: " + message.getText() + "\n");
+        }
     }
 
     /**
@@ -35,19 +185,19 @@ public class frmChatting extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblProfile = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblBack = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txfSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel5 = new javax.swing.JPanel();
+        panel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         lblSend = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txfMessages = new javax.swing.JTextField();
+        txaMessages = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         txfMessage = new javax.swing.JTextField();
 
@@ -59,8 +209,13 @@ public class frmChatting extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(53, 110, 242));
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/profile.png"))); // NOI18N
+        lblProfile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/profile.png"))); // NOI18N
+        lblProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblProfileMouseClicked(evt);
+            }
+        });
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/chatting.png"))); // NOI18N
@@ -69,6 +224,11 @@ public class frmChatting extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/settings.png"))); // NOI18N
 
         lblBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left-arrow.png"))); // NOI18N
+        lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBackMouseClicked(evt);
+            }
+        });
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/new-message.png"))); // NOI18N
 
@@ -80,7 +240,7 @@ public class frmChatting extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblBack)
                 .addContainerGap())
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblProfile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -94,7 +254,7 @@ public class frmChatting extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblBack)
                 .addGap(158, 158, 158)
-                .addComponent(jLabel1)
+                .addComponent(lblProfile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -106,28 +266,17 @@ public class frmChatting extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextField1.setBackground(new java.awt.Color(53, 110, 242));
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("Search");
+        txfSearch.setBackground(new java.awt.Color(53, 110, 242));
+        txfSearch.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txfSearch.setForeground(new java.awt.Color(255, 255, 255));
+        txfSearch.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txfSearch.setText("Search");
 
-        jPanel5.setBackground(new java.awt.Color(53, 110, 242));
-        jPanel5.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 223, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 461, Short.MAX_VALUE)
-        );
-
-        jScrollPane1.setViewportView(jPanel5);
+        panel.setBackground(new java.awt.Color(53, 110, 242));
+        panel.setForeground(new java.awt.Color(255, 255, 255));
+        panel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        panel.setLayout(new java.awt.GridLayout(1000, 1));
+        jScrollPane1.setViewportView(panel);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -137,14 +286,14 @@ public class frmChatting extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(txfSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -153,12 +302,16 @@ public class frmChatting extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
         lblSend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/send4.png"))); // NOI18N
+        lblSend.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSendMouseClicked(evt);
+            }
+        });
 
-        txfMessages.setBackground(new java.awt.Color(53, 110, 242));
-        txfMessages.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        txfMessages.setForeground(new java.awt.Color(255, 255, 255));
-        txfMessages.setBorder(null);
-        jScrollPane2.setViewportView(txfMessages);
+        txaMessages.setBackground(new java.awt.Color(53, 110, 242));
+        txaMessages.setColumns(20);
+        txaMessages.setRows(5);
+        jScrollPane2.setViewportView(txaMessages);
 
         txfMessage.setBackground(new java.awt.Color(53, 110, 242));
         txfMessage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -171,28 +324,28 @@ public class frmChatting extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(lblSend)
-                .addGap(27, 27, 27))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane2)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblSend)
+                        .addGap(0, 12, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3)
-                        .addContainerGap())
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblSend)
-                        .addGap(41, 41, 41))))
+                        .addGap(10, 10, 10)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -243,46 +396,74 @@ public class frmChatting extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+    private void lblBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+        // TODO add your handling code here:
+        frmLogin login = new frmLogin();
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblBackMouseClicked
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmChatting().setVisible(true);
-            }
-        });
-    }
+    private void lblProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblProfileMouseClicked
+        // TODO add your handling code here:
+        frmProfile profile = new frmProfile(phone);
+        profile.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblProfileMouseClicked
+
+    private void lblSendMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSendMouseClicked
+        // TODO add your handling code here:
+        String message = txfMessage.getText();
+        if(message != null){
+            Message newMessage = new Message(new ObjectId(), selectedChatId, phone, message, new Date());
+            MessageService messageService = new MessageService();
+            messageService.SendMessage(newMessage);
+            showMessages(messageService.LoadChatMessages(selectedChatId));
+            txfMessage.setText("");
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "The message could not be sent. Make sure it isn't empty.");
+        }
+    }//GEN-LAST:event_lblSendMouseClicked
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(frmChatting.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new frmChatting().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -290,15 +471,16 @@ public class frmChatting extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblBack;
+    private javax.swing.JLabel lblProfile;
     private javax.swing.JLabel lblSend;
+    private javax.swing.JPanel panel;
+    private javax.swing.JTextArea txaMessages;
     private javax.swing.JTextField txfMessage;
-    private javax.swing.JTextField txfMessages;
+    private javax.swing.JTextField txfSearch;
     // End of variables declaration//GEN-END:variables
 }
