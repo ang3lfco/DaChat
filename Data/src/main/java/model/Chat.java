@@ -55,4 +55,9 @@ public class Chat {
     public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
+
+    @Override
+    public String toString() {
+        return "Chat{" + "id=" + id + ", name=" + name + ", miniature=" + miniature + ", participants=" + participants + '}';
+    }
 }
