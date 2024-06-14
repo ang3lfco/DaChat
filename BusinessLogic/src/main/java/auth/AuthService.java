@@ -12,13 +12,9 @@ import model.User;
  * @author martinez
  */
 public class AuthService {
-    private UserDAO userDAO;
-    
-    public AuthService(){
-        userDAO = new UserDAO();
-    }
     
     public boolean login(String phone, String password){
+        UserDAO userDAO = new UserDAO();
         User user = userDAO.findByPhone(phone);
         return user != null && user.getPassword().equals(password);
     }
