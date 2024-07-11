@@ -56,6 +56,7 @@ public class frmChatting extends javax.swing.JFrame {
         this.phone = phone;
         this.chats = chatService.LoadChats(phone);
         panels = new ArrayList<>();
+        jspMessages.getVerticalScrollBar().setUnitIncrement(16);
         
         if(!chats.isEmpty()){
             for(Chat chat : chats){
@@ -159,18 +160,65 @@ public class frmChatting extends javax.swing.JFrame {
         });
     }
     
+    
     private void showMessages(List<Message> messages){
-        txaMessages.setText("");
-        txaMessages.setForeground(Color.WHITE);
+        messagesPanel.removeAll();
+        messagesPanel.setForeground(Color.WHITE);
+//        txaMessages.setText("");
+//        txaMessages.setForeground(Color.WHITE);
         Font sogoeBold12 = new Font("Sogoe UI", Font.BOLD, 12);
-        txaMessages.setFont(sogoeBold12);
+//        txaMessages.setFont(sogoeBold12);
         
         UserService userService = new UserService();
         for(Message message : messages){
             String nombre = userService.LoadUser(message.getIdSender()).getName();
             String fecha = message.getTimestamp().toString().substring(0,20) + message.getTimestamp().toString().substring(24);
-            txaMessages.append("(" + fecha + ") " + nombre + " says: " + message.getText() + "\n");
+            JPanel messagePanel = createMessagePanel(fecha, nombre, message.getText());
+            messagesPanel.add(messagePanel);
+//            txaMessages.add(messagePanel);
+//            txaMessages.append("(" + fecha + ") " + nombre + " says: " + message.getText() + "\n");
         }
+        messagesPanel.revalidate();
+        messagesPanel.repaint();
+    }
+    
+    private JPanel createMessagePanel(String timestamp, String senderName, String messageText) {
+        JPanel messagePanel = new JPanel();
+        messagePanel.setBackground(new Color(53, 110, 242));
+        messagePanel.setPreferredSize(new Dimension(400, 100));
+        messagePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+
+        JLabel lblTimestamp = new JLabel(timestamp);
+        lblTimestamp.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblTimestamp.setForeground(Color.WHITE);
+
+        JLabel lblSender = new JLabel(senderName + " says:");
+        lblSender.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblSender.setForeground(Color.WHITE);
+
+        JLabel lblMessage = new JLabel("<html>" + messageText.replace("\n", "<br>") + "</html>");
+        lblMessage.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblMessage.setForeground(Color.WHITE);
+
+        GroupLayout layout = new GroupLayout(messagePanel);
+        messagePanel.setLayout(layout);
+
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(lblTimestamp)
+                .addComponent(lblSender)
+                .addComponent(lblMessage)
+        );
+        layout.setVerticalGroup(
+            layout.createSequentialGroup()
+                .addComponent(lblTimestamp)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblSender)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMessage)
+        );
+
+        return messagePanel;
     }
 
     /**
@@ -192,13 +240,13 @@ public class frmChatting extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         txfSearch = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jspChats = new javax.swing.JScrollPane();
         panel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         lblSend = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txaMessages = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        jspMessages = new javax.swing.JScrollPane();
+        messagesPanel = new javax.swing.JPanel();
+        jspMessage = new javax.swing.JScrollPane();
         txfMessage = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -276,7 +324,7 @@ public class frmChatting extends javax.swing.JFrame {
         panel.setForeground(new java.awt.Color(255, 255, 255));
         panel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panel.setLayout(new java.awt.GridLayout(1000, 1));
-        jScrollPane1.setViewportView(panel);
+        jspChats.setViewportView(panel);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -285,7 +333,7 @@ public class frmChatting extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jspChats)
                     .addComponent(txfSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -295,7 +343,7 @@ public class frmChatting extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jspChats)
                 .addContainerGap())
         );
 
@@ -308,16 +356,14 @@ public class frmChatting extends javax.swing.JFrame {
             }
         });
 
-        txaMessages.setBackground(new java.awt.Color(53, 110, 242));
-        txaMessages.setColumns(20);
-        txaMessages.setRows(5);
-        jScrollPane2.setViewportView(txaMessages);
+        messagesPanel.setLayout(new java.awt.GridLayout(1000, 1));
+        jspMessages.setViewportView(messagesPanel);
 
         txfMessage.setBackground(new java.awt.Color(53, 110, 242));
         txfMessage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txfMessage.setForeground(new java.awt.Color(255, 255, 255));
         txfMessage.setBorder(null);
-        jScrollPane3.setViewportView(txfMessage);
+        jspMessage.setViewportView(txfMessage);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -325,9 +371,9 @@ public class frmChatting extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jspMessages)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jspMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(lblSend)
                         .addGap(0, 12, Short.MAX_VALUE)))
@@ -337,10 +383,10 @@ public class frmChatting extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jspMessages, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                    .addComponent(jspMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblSend)
@@ -472,14 +518,14 @@ public class frmChatting extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jspChats;
+    private javax.swing.JScrollPane jspMessage;
+    private javax.swing.JScrollPane jspMessages;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblProfile;
     private javax.swing.JLabel lblSend;
+    private javax.swing.JPanel messagesPanel;
     private javax.swing.JPanel panel;
-    private javax.swing.JTextArea txaMessages;
     private javax.swing.JTextField txfMessage;
     private javax.swing.JTextField txfSearch;
     // End of variables declaration//GEN-END:variables
