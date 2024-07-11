@@ -171,12 +171,12 @@ public class frmChatting extends javax.swing.JFrame {
         
         UserService userService = new UserService();
         for(Message message : messages){
-            String nombre = userService.LoadUser(message.getIdSender()).getName();
-            String fecha = message.getTimestamp().toString().substring(0,20) + message.getTimestamp().toString().substring(24);
-            JPanel messagePanel = createMessagePanel(fecha, nombre, message.getText());
+            String senderName = userService.LoadUser(message.getIdSender()).getName();
+            String timestamp = message.getTimestamp().toString().substring(0,20) + message.getTimestamp().toString().substring(24);
+            JPanel messagePanel = createMessagePanel(timestamp, senderName, message.getText());
             messagesPanel.add(messagePanel);
 //            txaMessages.add(messagePanel);
-//            txaMessages.append("(" + fecha + ") " + nombre + " says: " + message.getText() + "\n");
+//            txaMessages.append("(" + timestamp + ") " + senderName + " says: " + message.getText() + "\n");
         }
         messagesPanel.revalidate();
         messagesPanel.repaint();
