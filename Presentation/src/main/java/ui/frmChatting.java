@@ -26,6 +26,7 @@ import java.util.Date;
 import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle;
+import javax.swing.border.LineBorder;
 import org.bson.types.ObjectId;
 import services.MessageService;
 
@@ -185,8 +186,7 @@ public class frmChatting extends javax.swing.JFrame {
     private JPanel createMessagePanel(String timestamp, String senderName, String messageText) {
         JPanel messagePanel = new JPanel();
         messagePanel.setBackground(new Color(53, 110, 242));
-        messagePanel.setPreferredSize(new Dimension(400, 100));
-        messagePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+        messagePanel.setBorder(new LineBorder(Color.BLACK));
 
         JLabel lblTimestamp = new JLabel(timestamp);
         lblTimestamp.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -196,12 +196,14 @@ public class frmChatting extends javax.swing.JFrame {
         lblSender.setFont(new Font("Segoe UI", Font.BOLD, 12));
         lblSender.setForeground(Color.WHITE);
 
-        JLabel lblMessage = new JLabel("<html>" + messageText.replace("\n", "<br>") + "</html>");
-        lblMessage.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JLabel lblMessage = new JLabel(messageText);
+        lblMessage.setFont(new Font("Segoe UI", Font.BOLD, 12));
         lblMessage.setForeground(Color.WHITE);
 
         GroupLayout layout = new GroupLayout(messagePanel);
         messagePanel.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
 
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
