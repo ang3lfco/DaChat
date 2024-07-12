@@ -52,19 +52,19 @@ public class frmChatting extends javax.swing.JFrame {
     public frmChatting(String phone) {
         initComponents();
         setLocationRelativeTo(null);
-        
         this.chatService = new ChatService();
         this.phone = phone;
         this.chats = chatService.LoadChats(phone);
+        
         panels = new ArrayList<>();
         jspMessages.getVerticalScrollBar().setUnitIncrement(16);
         
         if(!chats.isEmpty()){
             for(Chat chat : chats){
-                
                 JPanel chatPanel = new JPanel();
                 chatPanel.setBackground(new Color(0, 51, 102));
-                chatPanel.setPreferredSize(new Dimension(211,70));
+                chatPanel.setPreferredSize(new Dimension(200,70));
+                chatPanel.setBorder(new LineBorder(Color.BLACK));
                 
                 String friendPhone = "";
                 for(String participant : chat.getParticipants()){
@@ -75,16 +75,18 @@ public class frmChatting extends javax.swing.JFrame {
                 UserService userService = new UserService();
                 
                 JLabel chatText1 = new JLabel(userService.LoadUser(friendPhone).getName());
-                JLabel chatText2 = new JLabel(chat.getParticipants().toString());
+                JLabel chatText2 = new JLabel("Press to talk with " + chatText1.getText());
                 Font sogoeBold12 = new Font("Segoe UI", Font.BOLD, 12);
-                Font sogoePlain12 = new Font("Sogoe UI", Font.PLAIN, 12);
+                Font sogoeBold10 = new Font("Sogoe UI", Font.BOLD, 10);
                 chatText1.setFont(sogoeBold12);
                 chatText1.setForeground(Color.WHITE);
-                chatText2.setFont(sogoePlain12);
+                chatText2.setFont(sogoeBold10);
                 chatText2.setForeground(Color.WHITE);
                 
                 GroupLayout layout = new GroupLayout(chatPanel);
                 chatPanel.setLayout(layout);
+                layout.setAutoCreateGaps(true);
+                layout.setAutoCreateContainerGaps(true);
                 
                 layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -185,7 +187,7 @@ public class frmChatting extends javax.swing.JFrame {
     
     private JPanel createMessagePanel(String timestamp, String senderName, String messageText) {
         JPanel messagePanel = new JPanel();
-        messagePanel.setBackground(new Color(53, 110, 242));
+        messagePanel.setBackground(new Color(0, 51, 102));
         messagePanel.setBorder(new LineBorder(Color.BLACK));
 
         JLabel lblTimestamp = new JLabel(timestamp);
