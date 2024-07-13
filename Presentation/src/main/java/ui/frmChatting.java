@@ -43,6 +43,7 @@ public class frmChatting extends javax.swing.JFrame {
     private String phone;
     private List<Chat> chats;
     private ChatService chatService;
+    private UserService userService;
     private List<JPanel> panels;
     private ObjectId selectedChatId;
     /**
@@ -55,6 +56,7 @@ public class frmChatting extends javax.swing.JFrame {
         this.chatService = new ChatService();
         this.phone = phone;
         this.chats = chatService.LoadChats(phone);
+        this.userService = new UserService();
         
         panels = new ArrayList<>();
         jspMessages.getVerticalScrollBar().setUnitIncrement(16);
@@ -72,7 +74,7 @@ public class frmChatting extends javax.swing.JFrame {
                         friendPhone = participant;
                     }
                 }
-                UserService userService = new UserService();
+                
                 
                 JLabel chatText1 = new JLabel(userService.LoadUser(friendPhone).getName());
                 JLabel chatText2 = new JLabel("Press to talk with " + chatText1.getText());
@@ -165,65 +167,74 @@ public class frmChatting extends javax.swing.JFrame {
     
     
     private void showMessages(List<Message> messages){
-        messagesPanel.removeAll();
-        messagesPanel.setForeground(Color.WHITE);
-//        txaMessages.setText("");
-//        txaMessages.setForeground(Color.WHITE);
+//        messagesPanel.removeAll();
+//        messagesPanel.setForeground(Color.WHITE);
+        txaMessages.setText("");
+        txaMessages.setBackground(new Color(0, 51, 102));
+        txaMessages.setForeground(Color.WHITE);
         Font sogoeBold12 = new Font("Sogoe UI", Font.BOLD, 12);
-//        txaMessages.setFont(sogoeBold12);
+        txaMessages.setFont(sogoeBold12);
         
         UserService userService = new UserService();
         for(Message message : messages){
             String senderName = userService.LoadUser(message.getIdSender()).getName();
             String timestamp = message.getTimestamp().toString().substring(0,20) + message.getTimestamp().toString().substring(24);
-            JPanel messagePanel = createMessagePanel(timestamp, senderName, message.getText());
-            messagesPanel.add(messagePanel);
-//            txaMessages.add(messagePanel);
+//            JPanel messagePanel = createMessagePanel(timestamp, senderName, message.getText());
 //            txaMessages.append("(" + timestamp + ") " + senderName + " says: " + message.getText() + "\n");
+//            messagesPanel.add(messagePanel);
+//            txaMessages.add(messagePanel);
+            txaMessages.append("(" + timestamp + ") " + senderName + " says: " + message.getText() + "\n");
+            txaMessages.append("\n");
         }
-        messagesPanel.revalidate();
-        messagesPanel.repaint();
+//        messagesPanel.revalidate();
+//        messagesPanel.repaint();
     }
     
-    private JPanel createMessagePanel(String timestamp, String senderName, String messageText) {
-        JPanel messagePanel = new JPanel();
-        messagePanel.setBackground(new Color(0, 51, 102));
-        messagePanel.setBorder(new LineBorder(Color.BLACK));
-
-        JLabel lblTimestamp = new JLabel(timestamp);
-        lblTimestamp.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblTimestamp.setForeground(Color.WHITE);
-
-        JLabel lblSender = new JLabel(senderName + " says:");
-        lblSender.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblSender.setForeground(Color.WHITE);
-
-        JLabel lblMessage = new JLabel(messageText);
-        lblMessage.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblMessage.setForeground(Color.WHITE);
-
-        GroupLayout layout = new GroupLayout(messagePanel);
-        messagePanel.setLayout(layout);
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
-
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(lblTimestamp)
-                .addComponent(lblSender)
-                .addComponent(lblMessage)
-        );
-        layout.setVerticalGroup(
-            layout.createSequentialGroup()
-                .addComponent(lblTimestamp)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblSender)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblMessage)
-        );
-
-        return messagePanel;
-    }
+//    private JPanel createMessagePanel(String timestamp, String senderName, String messageText) {
+//        JPanel messagePanel = new JPanel();
+//        messagePanel.setBorder(new LineBorder(Color.BLACK));
+//        
+//        if (userService.LoadUser(phone).getName().equals(senderName)) {
+//            messagePanel.setBackground(new Color(0, 153, 102));
+//        } 
+//        else {
+//            messagePanel.setBackground(new Color(0, 51, 102));
+//        }
+//
+//        JLabel lblTimestamp = new JLabel(timestamp);
+//        lblTimestamp.setFont(new Font("Segoe UI", Font.BOLD, 12));
+//        lblTimestamp.setForeground(Color.WHITE);
+//
+//        JLabel lblSender = new JLabel(senderName + " says:");
+//        lblSender.setFont(new Font("Segoe UI", Font.BOLD, 12));
+//        lblSender.setForeground(Color.WHITE);
+//
+//        JLabel lblMessage = new JLabel(messageText);
+//        lblMessage.setFont(new Font("Segoe UI", Font.BOLD, 12));
+//        lblMessage.setForeground(Color.WHITE);
+//
+//        GroupLayout layout = new GroupLayout(messagePanel);
+//        messagePanel.setLayout(layout);
+//        layout.setAutoCreateGaps(true);
+//        layout.setAutoCreateContainerGaps(true);
+//
+//        layout.setHorizontalGroup(
+//            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                .addComponent(lblTimestamp)
+//                .addComponent(lblSender)
+//                .addComponent(lblMessage)
+//        );
+//        layout.setVerticalGroup(
+//            layout.createSequentialGroup()
+//                .addComponent(lblTimestamp)
+//                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//                .addComponent(lblSender)
+//                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//                .addComponent(lblMessage)
+//        );
+//
+//        return messagePanel;
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -249,7 +260,7 @@ public class frmChatting extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         lblSend = new javax.swing.JLabel();
         jspMessages = new javax.swing.JScrollPane();
-        messagesPanel = new javax.swing.JPanel();
+        txaMessages = new javax.swing.JTextArea();
         jspMessage = new javax.swing.JScrollPane();
         txfMessage = new javax.swing.JTextField();
 
@@ -257,9 +268,9 @@ public class frmChatting extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBackground(new java.awt.Color(245, 245, 245));
 
-        jPanel2.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
 
         lblProfile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/profile.png"))); // NOI18N
@@ -316,17 +327,17 @@ public class frmChatting extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBackground(new java.awt.Color(245, 245, 245));
 
-        txfSearch.setBackground(new java.awt.Color(53, 110, 242));
+        txfSearch.setBackground(new java.awt.Color(0, 51, 102));
         txfSearch.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txfSearch.setForeground(new java.awt.Color(255, 255, 255));
         txfSearch.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txfSearch.setText("Search");
 
-        panel.setBackground(new java.awt.Color(53, 110, 242));
+        panel.setBackground(new java.awt.Color(0, 51, 102));
         panel.setForeground(new java.awt.Color(255, 255, 255));
-        panel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         panel.setLayout(new java.awt.GridLayout(1000, 1));
         jspChats.setViewportView(panel);
 
@@ -351,22 +362,26 @@ public class frmChatting extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBackground(new java.awt.Color(245, 245, 245));
 
         lblSend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/send4.png"))); // NOI18N
+        lblSend.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblSend.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblSendMouseClicked(evt);
             }
         });
 
-        messagesPanel.setLayout(new java.awt.GridLayout(1000, 1));
-        jspMessages.setViewportView(messagesPanel);
+        txaMessages.setBackground(new java.awt.Color(0, 51, 102));
+        txaMessages.setColumns(20);
+        txaMessages.setRows(5);
+        jspMessages.setViewportView(txaMessages);
 
-        txfMessage.setBackground(new java.awt.Color(53, 110, 242));
+        txfMessage.setBackground(new java.awt.Color(0, 51, 102));
         txfMessage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txfMessage.setForeground(new java.awt.Color(255, 255, 255));
         txfMessage.setBorder(null);
+        txfMessage.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jspMessage.setViewportView(txfMessage);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -528,8 +543,8 @@ public class frmChatting extends javax.swing.JFrame {
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblProfile;
     private javax.swing.JLabel lblSend;
-    private javax.swing.JPanel messagesPanel;
     private javax.swing.JPanel panel;
+    private javax.swing.JTextArea txaMessages;
     private javax.swing.JTextField txfMessage;
     private javax.swing.JTextField txfSearch;
     // End of variables declaration//GEN-END:variables

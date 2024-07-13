@@ -68,17 +68,17 @@ public class frmProfile extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(245, 245, 245));
 
-        jPanel8.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel8.setBackground(new java.awt.Color(0, 51, 102));
 
+        jLabel14.setText("Name");
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("Name");
 
+        lblName.setText("xxxxxxxxx");
         lblName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblName.setForeground(new java.awt.Color(255, 255, 255));
-        lblName.setText("xxxxxxxxx");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -101,15 +101,15 @@ public class frmProfile extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jPanel9.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel9.setBackground(new java.awt.Color(0, 51, 102));
 
+        jLabel16.setText("Phone");
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("Phone");
 
+        lblPhone.setText("xxxxxxxxx");
         lblPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblPhone.setForeground(new java.awt.Color(255, 255, 255));
-        lblPhone.setText("xxxxxxxxx");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -132,15 +132,15 @@ public class frmProfile extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jPanel10.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel10.setBackground(new java.awt.Color(0, 51, 102));
 
+        jLabel18.setText("Password");
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Password");
 
+        lblPassword.setText("xxxxxxxxx");
         lblPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword.setText("xxxxxxxxx");
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -163,15 +163,15 @@ public class frmProfile extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jPanel11.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel11.setBackground(new java.awt.Color(0, 51, 102));
 
+        jLabel20.setText("Birthdate");
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel20.setText("Birthdate");
 
+        lblBirthdate.setText("xxxxxxxxx");
         lblBirthdate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblBirthdate.setForeground(new java.awt.Color(255, 255, 255));
-        lblBirthdate.setText("xxxxxxxxx");
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -194,15 +194,15 @@ public class frmProfile extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jPanel12.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel12.setBackground(new java.awt.Color(0, 51, 102));
 
+        jLabel22.setText("Address");
         jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel22.setText("Address");
 
+        lblAddress.setText("xxxxxxxxx");
         lblAddress.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblAddress.setForeground(new java.awt.Color(255, 255, 255));
-        lblAddress.setText("xxxxxxxxx");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -225,15 +225,15 @@ public class frmProfile extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jPanel13.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel13.setBackground(new java.awt.Color(0, 51, 102));
 
+        jLabel24.setText("Gender");
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel24.setText("Gender");
 
+        lblGender.setText("xxxxxxxxx");
         lblGender.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblGender.setForeground(new java.awt.Color(255, 255, 255));
-        lblGender.setText("xxxxxxxxx");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -256,7 +256,7 @@ public class frmProfile extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(53, 110, 242));
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
 
         lblProfile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/profile.png"))); // NOI18N
@@ -406,10 +406,6 @@ public class frmProfile extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel18;
@@ -425,8 +421,6 @@ public class frmProfile extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JLabel lblAddress;

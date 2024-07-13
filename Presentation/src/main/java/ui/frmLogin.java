@@ -107,21 +107,21 @@ public class frmLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        pnlLogin.setBackground(new java.awt.Color(255, 255, 255));
+        pnlLogin.setBackground(new java.awt.Color(245, 245, 245));
 
         lblDaChatIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/DaChat.png"))); // NOI18N
 
-        pnlPhone.setBackground(new java.awt.Color(53, 110, 242));
+        pnlPhone.setBackground(new java.awt.Color(0, 51, 102));
 
+        lblPhone.setText("Phone number:");
         lblPhone.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblPhone.setForeground(new java.awt.Color(255, 255, 255));
-        lblPhone.setText("Phone number:");
 
-        txfPhone.setBackground(new java.awt.Color(51, 102, 255));
         txfPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txfPhone.setForeground(new java.awt.Color(255, 255, 255));
         txfPhone.setText("Enter your phone number");
+        txfPhone.setBackground(new java.awt.Color(0, 51, 102));
         txfPhone.setBorder(null);
+        txfPhone.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout pnlPhoneLayout = new javax.swing.GroupLayout(pnlPhone);
         pnlPhone.setLayout(pnlPhoneLayout);
@@ -144,17 +144,17 @@ public class frmLogin extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        pnlPassword.setBackground(new java.awt.Color(53, 110, 242));
+        pnlPassword.setBackground(new java.awt.Color(0, 51, 102));
 
+        lblPassword.setText("Password:");
         lblPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword.setText("Password:");
 
-        pwfPassword.setBackground(new java.awt.Color(51, 102, 255));
         pwfPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        pwfPassword.setForeground(new java.awt.Color(255, 255, 255));
         pwfPassword.setText("Type your password");
+        pwfPassword.setBackground(new java.awt.Color(0, 51, 102));
         pwfPassword.setBorder(null);
+        pwfPassword.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout pnlPasswordLayout = new javax.swing.GroupLayout(pnlPassword);
         pnlPassword.setLayout(pnlPasswordLayout);
