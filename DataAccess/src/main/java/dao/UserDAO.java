@@ -29,7 +29,7 @@ public class UserDAO {
         
         Document userDoc = new Document()
                 .append("_id", user.getId())
-                .append("name", user.getPhone())
+                .append("name", user.getName())
                 .append("phone", user.getPhone())
                 .append("password", user.getPassword())
                 .append("address", userAddress)
