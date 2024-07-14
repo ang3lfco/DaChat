@@ -34,7 +34,8 @@ public class UserDAO {
                 .append("password", user.getPassword())
                 .append("address", userAddress)
                 .append("birthdate", user.getBirthdate())
-                .append("gender", user.getGender());
+                .append("gender", user.getGender())
+                .append("profile", user.getPicture());
         
         MongoClient mongoClient = MongoClients.create(MongoConnection.getConnection());
         MongoCollection<Document> collection = mongoClient.getDatabase(MongoConnection.getDatabase())
@@ -60,7 +61,8 @@ public class UserDAO {
                     userDoc.getString("password"),
                     getAddress(userDoc),
                     userDoc.getDate("birthdate"),
-                    userDoc.getString("gender")
+                    userDoc.getString("gender"),
+                    userDoc.getString("profile")
             );
             cursor.close();
             mongoClient.close();

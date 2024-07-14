@@ -19,8 +19,9 @@ public class User {
     private Address address;
     private Date birthdate;
     private String gender;
+    private String picture;
     
-    public User(ObjectId id, String name, String phone, String password, Address address, Date birthdate, String gender){
+    public User(ObjectId id, String name, String phone, String password, Address address, Date birthdate, String gender, String picture){
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -28,6 +29,7 @@ public class User {
         this.address = address;
         this.birthdate = birthdate;
         this.gender = gender;
+        this.picture = picture;
     }
 
     public ObjectId getId() {
@@ -86,8 +88,16 @@ public class User {
         this.gender = gender;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", phone=" + phone + ", password=" + password + ", address=" + address + ", birthdate=" + birthdate + ", gender=" + gender + '}';
+        return "User{" + "id=" + id + ", name=" + name + ", phone=" + phone + ", password=" + password + ", address=" + address + ", birthdate=" + birthdate + ", gender=" + gender + ", picture=" + picture + '}';
     }
 }
