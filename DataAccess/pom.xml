@@ -17,10 +17,18 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>3.10.2</version>
         </dependency>
+        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Data</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.760</version>
         </dependency>
     </dependencies>
 </project>
