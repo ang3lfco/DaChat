@@ -14,7 +14,9 @@ db.users.insertMany([
        number: "",
        zipcode: ""
    },
-   birthdate: new Date('')
+   birthdate: new Date(''),
+   gender: "",
+   profile: ""
 },
 {
     _id: ObjectId(),
@@ -26,7 +28,9 @@ db.users.insertMany([
        number: "",
        zipcode: ""
    },
-   birthdate: new Date('')
+   birthdate: new Date(''),
+   gender: "",
+   profile: ""
 }]);
 
 db.chats.insertMany([{
